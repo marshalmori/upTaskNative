@@ -13,8 +13,11 @@ import {
   HStack,
   Text,
 } from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 
 const Login = () => {
+  const navigation = useNavigation();
+
   return (
     <NativeBaseProvider>
       <Center w="100%">
@@ -76,7 +79,7 @@ const Login = () => {
                   fontWeight: 'medium',
                   fontSize: 'sm',
                 }}
-                href="#">
+                onPress={() => navigation.navigate('CrearCuenta')}>
                 Crear Cuenta
               </Link>
             </HStack>
