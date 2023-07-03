@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {
   NativeBaseProvider,
@@ -12,11 +12,49 @@ import {
   Button,
   HStack,
   Text,
+  Alert,
 } from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 const Login = () => {
+  const [email, guardarEmail] = useState('');
+  const [password, guardarPassword] = useState('');
+
+  const [mensaje, guardarMensaje] = useState(null);
+
   const navigation = useNavigation();
+
+  // Cuando el usuario presiona en iniciar sesion
+  const handleSubmit = () => {
+    // validar
+    if (email === '' || password === '') {
+      // Mostar un error
+      guardarMensaje('Todos los campos son obligatorios');
+      return;
+    }
+
+    try {
+    } catch (error) {}
+  };
+
+  // muestra un mensaje toast
+  const mostrarAlerta = () => {
+    return (
+      <Alert w="100%" colorScheme="success" status="error">
+        <VStack space={2} flexShrink={1} w="100%">
+          <HStack
+            flexShrink={1}
+            space={2}
+            alignItems="center"
+            justifyContent="space-between">
+            <HStack space={2} flexShrink={1} alignItems="center">
+              <Text color="coolGray.800">{mensaje}</Text>
+            </HStack>
+          </HStack>
+        </VStack>
+      </Alert>
+    );
+  };
 
   return (
     <NativeBaseProvider>
@@ -45,11 +83,14 @@ const Login = () => {
           <VStack space={3} mt="5">
             <FormControl>
               <FormControl.Label>Email</FormControl.Label>
-              <Input />
+              <Input onChangeText={texto => guardarEmail(texto)} />
             </FormControl>
             <FormControl>
               <FormControl.Label>Password</FormControl.Label>
-              <Input type="password" />
+              <Input
+                type="password"
+                onChangeText={texto => guardarPassword(texto)}
+              />
               <Link
                 _text={{
                   fontSize: 'xs',
@@ -61,7 +102,7 @@ const Login = () => {
                 ¿Olvido la contraseña?
               </Link>
             </FormControl>
-            <Button mt="2" colorScheme="indigo">
+            <Button mt="2" colorScheme="indigo" onPress={() => handleSubmit()}>
               Iniciar Sesión
             </Button>
             <HStack mt="6" justifyContent="center">
@@ -82,6 +123,8 @@ const Login = () => {
                 onPress={() => navigation.navigate('CrearCuenta')}>
                 Crear Cuenta
               </Link>
+
+              {mensaje && mostrarAlerta()}
             </HStack>
           </VStack>
         </Box>
