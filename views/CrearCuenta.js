@@ -10,12 +10,16 @@ import {
   Button,
   HStack,
   Text,
-  IconButton,
-  CloseIcon,
   Alert,
 } from 'native-base';
 import {useNavigation} from '@react-navigation/native';
-import {useToast} from 'native-base';
+import {gql, useMutation} from '@apollo/client';
+
+const NUEVA_CUENTA = gql`
+  mutation crearUsuario($input: UsuarioInput) {
+    crearUsuario(input: $input)
+  }
+`;
 
 const CrearCuenta = () => {
   const [nombre, guardarNombre] = useState('');
@@ -27,11 +31,11 @@ const CrearCuenta = () => {
   // React navigation
   const navigation = useNavigation();
 
-  // Toast
-  const toast = useToast();
+  //Mutation de apollo
+  const [crearUsuario] = useMutation(NUEVA_CUENTA);
 
   // Cuando el usuario presiona en criar cuenta
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // validar
     if (nombre === '' || email === '' || password === '') {
       // Mostar un error
@@ -45,6 +49,21 @@ const CrearCuenta = () => {
     }
 
     // guardar el usuario
+    try {
+      const {data} = await crearUsuario({
+        variables: {
+          input: {
+            nombre,
+            email,
+            password,
+          },
+        },
+      });
+      guardarMensaje(data.crearUsuario);
+      navigation.navigate('Login');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // muestra un mensaje toast

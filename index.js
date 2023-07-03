@@ -4,8 +4,13 @@ import App from './App';
 import {name as appName} from './app.json';
 import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 
+/* -------------------------------------------------------------------------- */
+/*              ip maquina virtual android http://10.0.2.2:4000/              */
+/* -------------------------------------------------------------------------- */
+// Platform.OS === 'ios' ? 'http://localhost:4000' : 'http://10.0.2.2:4000/',
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
+  uri: 'http://10.0.2.2:4000/',
   cache: new InMemoryCache(),
 });
 
