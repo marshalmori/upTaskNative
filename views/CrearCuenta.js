@@ -62,7 +62,8 @@ const CrearCuenta = () => {
       guardarMensaje(data.crearUsuario);
       navigation.navigate('Login');
     } catch (error) {
-      console.log(error);
+      guardarMensaje(error.message.replace('GraphQL error: ', ''));
+      console.log(error.message.replace('GraphQL error: ', ''));
     }
   };
 
