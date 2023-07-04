@@ -16,6 +16,17 @@ import {
 } from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
+// Apollo
+import {gql, useMutation} from '@apollo/client';
+
+const AUTENTICAR_USUARIO = gql`
+  mutation autenticarUsuario($input: AutenticarInput) {
+    autenticarUsuario(input: $input) {
+      token
+    }
+  }
+`;
+
 const Login = () => {
   const [email, guardarEmail] = useState('');
   const [password, guardarPassword] = useState('');
@@ -24,8 +35,10 @@ const Login = () => {
 
   const navigation = useNavigation();
 
+  const [autenticarUsuario] = useMutation(AUTENTICAR_USUARIO);
+
   // Cuando el usuario presiona en iniciar sesion
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // validar
     if (email === '' || password === '') {
       // Mostar un error
@@ -34,7 +47,22 @@ const Login = () => {
     }
 
     try {
-    } catch (error) {}
+      // autenticar el usuario
+      const {data} = await autenticarUsuario({
+        variables: {
+          input: {
+            email,
+            password,
+          },
+        },
+      });
+
+      const {token} = data.autenticarUsuario;
+      console.log(token);
+    } catch (error) {
+      // si hay un error mostrarlo
+      guardarMensaje(error.message.replace('GraphQL error: ', ''));
+    }
   };
 
   // muestra un mensaje toast
@@ -123,9 +151,8 @@ const Login = () => {
                 onPress={() => navigation.navigate('CrearCuenta')}>
                 Crear Cuenta
               </Link>
-
-              {mensaje && mostrarAlerta()}
             </HStack>
+            {mensaje && mostrarAlerta()}
           </VStack>
         </Box>
       </Center>
