@@ -15,6 +15,7 @@ import {
   Alert,
 } from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Apollo
 import {gql, useMutation} from '@apollo/client';
@@ -58,7 +59,11 @@ const Login = () => {
       });
 
       const {token} = data.autenticarUsuario;
-      console.log(token);
+      // Colocar token en storage
+      await AsyncStorage.setItem('token', token);
+
+      // Redireccionar a Proyectos
+      navigation.navigate('Proyectos');
     } catch (error) {
       // si hay un error mostrarlo
       guardarMensaje(error.message.replace('GraphQL error: ', ''));
