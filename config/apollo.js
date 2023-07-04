@@ -1,8 +1,7 @@
 import {Platform} from 'react-native';
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import {setContext} from '@apollo/client/link/context';
-import {setContext} from 'apollo-link-context';
+import {setContext} from '@apollo/client/link/context';
 
 /* -------------------------------------------------------------------------- */
 /*              ip maquina virtual android http://10.0.2.2:4000/              */
